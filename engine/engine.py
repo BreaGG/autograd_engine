@@ -1,7 +1,5 @@
 import numpy as np
 
-import numpy as np
-
 class Engine:
     def __init__(self, data, requires_grad=True):
         self.data = np.array(data, dtype=float)  # Wrap the data in a numpy array to handle different data types
@@ -42,6 +40,20 @@ class Engine:
         out._prev = [self, other]
         return out
 
+    def __sub__(self, other):
+        other = other if isinstance(other, Engine) else Engine(other)
+        out = Engine(self.data - other.data)
+
+        def _backward():
+            if self.requires_grad:
+                self.grad += out.grad
+            if other.requires_grad:
+                other.grad -= out.grad
+
+        out._backward = _backward
+        out._prev = [self, other]
+        return out
+
     def __mul__(self, other):
         other = other if isinstance(other, Engine) else Engine(other)
         out = Engine(self.data * other.data)
@@ -51,6 +63,45 @@ class Engine:
                 self.grad += other.data * out.grad
             if other.requires_grad:
                 other.grad += self.data * out.grad
+
+        out._backward = _backward
+        out._prev = [self, other]
+        return out
+
+    def __truediv__(self, other):
+        other = other if isinstance(other, Engine) else Engine(other)
+        out = Engine(self.data / other.data)
+
+        def _backward():
+            if self.requires_grad:
+                self.grad += out.grad / other.data
+            if other.requires_grad:
+                other.grad -= (self.data / (other.data ** 2)) * out.grad
+
+        out._backward = _backward
+        out._prev = [self, other]
+        return out
+
+    def __pow__(self, exponent):
+        out = Engine(self.data ** exponent)
+
+        def _backward():
+            if self.requires_grad:
+                self.grad += (exponent * (self.data ** (exponent - 1))) * out.grad
+
+        out._backward = _backward
+        out._prev = [self]
+        return out
+
+    def matmul(self, other):
+        other = other if isinstance(other, Engine) else Engine(other)
+        out = Engine(np.dot(self.data, other.data))
+
+        def _backward():
+            if self.requires_grad:
+                self.grad += np.dot(out.grad, other.data.T)
+            if other.requires_grad:
+                other.grad += np.dot(self.data.T, out.grad)
 
         out._backward = _backward
         out._prev = [self, other]

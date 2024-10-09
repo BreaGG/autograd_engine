@@ -52,8 +52,6 @@ python tests/test_engine.py
 - Add more operations like division, power, and activation functions.
 - Implement support for matrix operations and neural network modules.
 
-The README content has been removed. Now, let me explain how the autograd engine works.
-
 ## How the Engine Works
 
 The core component of this project is the `Engine` class, which is a simplified implementation of an automatic differentiation engine, like PyTorch’s `autograd`. This class allows you to perform basic operations on tensors (e.g., addition, multiplication) and automatically compute gradients.
