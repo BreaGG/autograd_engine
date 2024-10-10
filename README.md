@@ -48,9 +48,13 @@ python tests/test_engine.py
 - Backpropagation for gradients
 - Supports basic arithmetic operations like addition and multiplication
 
-## Future Improvements
-- Add more operations like division, power, and activation functions.
-- Implement support for matrix operations and neural network modules.
+## Jupyter Notebooks with practical examples
+
+The following Jupyter notebooks are available in the root of this repository:
+
+1. [MNIST Classification](./MNIST_clasification.ipynb): Classification of handwritten digits of the MNIST dataset.
+2. [Classic Liner Prediction](./Classic_Prediction.ipynb): Example of a comon linear prediction.
+3. [Binary Classification](./binary_clasification.ipynb): Example of a comon binary classification.
 
 ## How the Engine Works
 
