@@ -109,3 +109,6 @@ class Engine:
 
     def __repr__(self):
         return f"Engine(data={self.data}, requires_grad={self.requires_grad}, grad={self.grad})"
+    
+    def transpose(self):
+        return Engine(self.data.T, requires_grad=self.requires_grad)
